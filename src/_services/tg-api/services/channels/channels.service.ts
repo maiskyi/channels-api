@@ -22,7 +22,26 @@ export class TgChannelsService {
 
       const { chats } = await this.client.invoke(command);
 
-      return chats;
+      const requests = chats.map(async (item) => {
+        if (item.className === 'Channel' && item.photo) {
+          const buffer = await this.client.downloadProfilePhoto(item);
+
+          return buffer
+            ? `data:image/jpeg;base64,${buffer.toString('base64')}`
+            : null;
+        }
+
+        return Promise.resolve(null);
+      });
+
+      const photos = await Promise.all(requests);
+
+      const channels = Array.from({ length: chats.length }).map((_, index) => ({
+        channel: chats[index],
+        photo: photos[index],
+      }));
+
+      return { channels };
     } catch (error) {
       this.logger.error({ query, take }, error);
       throw error;

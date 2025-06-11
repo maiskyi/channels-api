@@ -28,22 +28,27 @@ export class GetSearchChannelsController {
     @Query() { take, query }: GetSearchChannelsRequest,
   ): Promise<GetSearchChannelsResponse> {
     try {
-      const channels = await this.tgApi.channels.search({ take, query });
+      const { channels } = await this.tgApi.channels.search({ take, query });
 
-      const data: SearchChannelsItem[] = channels.reduce((res, item) => {
-        if (item.className === 'Channel') {
-          return [
-            ...res,
-            {
-              id: item.id,
-              title: item.title,
-            },
-          ];
-        }
-        return res;
-      }, []);
+      const data: SearchChannelsItem[] = channels.reduce(
+        (res, { channel, photo }) => {
+          if (channel.className === 'Channel') {
+            return [
+              ...res,
+              {
+                photo,
+                id: channel.id,
+                title: channel.title,
+                userName: channel.username,
+              },
+            ];
+          }
+          return res;
+        },
+        [],
+      );
 
-      return { data, total: channels.length };
+      return { data, total: data.length };
     } catch (error) {
       this.logger.error(error);
       throw error;
