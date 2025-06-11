@@ -19,7 +19,7 @@ export class GetSearchChannelsController {
 
   @Get('channels')
   @ApiOperation({
-    operationId: 'getSearchChannels',
+    operationId: 'channelsSearch',
   })
   @ApiOkResponse({
     type: GetSearchChannelsResponse,
