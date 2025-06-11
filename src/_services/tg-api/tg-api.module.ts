@@ -29,7 +29,6 @@ export class TgApiModule {
             await client.start({
               phoneNumber: async () =>
                 await input.text('Enter your phone number: '),
-              password: async () => await input.text('Enter your password: '),
               phoneCode: async () =>
                 await input.text('Enter the code you received: '),
               onError: (err) => console.log(err),
