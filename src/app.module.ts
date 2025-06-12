@@ -4,6 +4,7 @@ import { TgApiModule } from '@services/tg-api';
 import { toNumber } from 'lodash';
 
 import { SearchModule } from './search';
+import { ChannelsModule } from './channels';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { SearchModule } from './search';
       apiHash: process.env.TG_APP_API_HASH,
       botApiToken: process.env.TG_BOT_API_TOKEN,
     }),
+    ChannelsModule,
     SearchModule,
   ],
 })
