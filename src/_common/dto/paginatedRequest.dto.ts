@@ -11,7 +11,7 @@ export class PaginatedRequest {
   @IsInt()
   @IsOptional()
   @Min(1)
-  @Transform(({ value }) => parseInt(value, 10))
+  @Transform(({ value }) => typeof value === 'string' && parseInt(value, 10))
   public readonly take: number;
 
   @ApiProperty({
@@ -22,6 +22,6 @@ export class PaginatedRequest {
   @IsInt()
   @IsOptional()
   @Min(1)
-  @Transform(({ value }) => parseInt(value, 10))
+  @Transform(({ value }) => typeof value === 'string' && parseInt(value, 10))
   public readonly skip: number;
 }

@@ -25,12 +25,9 @@ export class TgChannelsService {
       const requests = chats.map(async (item) => {
         if (item.className === 'Channel' && item.photo) {
           const buffer = await this.client.downloadProfilePhoto(item);
-
-          return buffer
-            ? `data:image/jpeg;base64,${buffer.toString('base64')}`
-            : null;
+          const base64 = buffer?.toString('base64');
+          return base64 ? `data:image/jpeg;base64,${base64}` : null;
         }
-
         return Promise.resolve(null);
       });
 

@@ -27,10 +27,15 @@ export class TgApiModule {
             });
 
             await client.start({
-              phoneNumber: async () =>
-                await input.text('Enter your phone number: '),
-              phoneCode: async () =>
-                await input.text('Enter the code you received: '),
+              phoneNumber: async () => {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                return await input.text('Enter your phone number: ');
+              },
+
+              phoneCode: async () => {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                return await input.text('Enter the code you received: ');
+              },
               onError: (err) => console.log(err),
             });
 
