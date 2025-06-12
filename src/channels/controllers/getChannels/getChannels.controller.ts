@@ -17,15 +17,19 @@ export class GetChannelsController {
   public async getChannels(
     @Query() { take = 25 }: GetChannelsRequest,
   ): Promise<GetChannelsResponse> {
-    // return await Promise.resolve({ data: [], total: 0 });
-    return await Promise.resolve({
-      data: Array.from({ length: take }).map(() => ({
-        id: faker.string.uuid() as unknown as bigInt.BigInteger,
-        title: faker.lorem.words(3),
-        userName: faker.lorem.word(),
-        photo: faker.image.dataUri(),
-      })),
-      total: 150,
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({ data: [], total: 0 });
+        resolve({
+          data: Array.from({ length: take }).map(() => ({
+            id: faker.string.uuid() as unknown as bigInt.BigInteger,
+            title: faker.lorem.words(3),
+            userName: faker.lorem.word(),
+            photo: faker.image.dataUri(),
+          })),
+          total: 150,
+        });
+      }, 2000);
     });
   }
 }
