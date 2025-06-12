@@ -1,9 +1,9 @@
 import { Controller, Get, Logger, Query } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { TgApiClientService } from '@services/tg-api';
+import { ChannelItem } from '@common/dto';
 
 import {
-  SearchChannelsItem,
   GetSearchChannelsResponse,
   GetSearchChannelsRequest,
 } from './getSearchChannels.dto';
@@ -30,23 +30,20 @@ export class GetSearchChannelsController {
     try {
       const { channels } = await this.tgApi.channels.search({ take, query });
 
-      const data: SearchChannelsItem[] = channels.reduce(
-        (res, { channel, photo }) => {
-          if (channel.className === 'Channel') {
-            return [
-              ...res,
-              {
-                photo,
-                id: channel.id,
-                title: channel.title,
-                userName: channel.username,
-              },
-            ];
-          }
-          return res;
-        },
-        [],
-      );
+      const data: ChannelItem[] = channels.reduce((res, { channel, photo }) => {
+        if (channel.className === 'Channel') {
+          return [
+            ...res,
+            {
+              photo,
+              id: channel.id,
+              title: channel.title,
+              userName: channel.username,
+            },
+          ];
+        }
+        return res;
+      }, []);
 
       return { data, total: data.length };
     } catch (error) {
