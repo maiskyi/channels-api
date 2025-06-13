@@ -42,8 +42,8 @@ export class GetChannelController {
 
       const title = channel.className === 'Channel' ? channel.title : null;
 
-      const recommendations: ChannelItem[] = channels.reduce(
-        (res, { channel, photo }) => {
+      const recommendations: ChannelItem[] = channels
+        .reduce((res, { channel, photo }) => {
           if (channel.className === 'Channel') {
             return [
               ...res,
@@ -56,9 +56,8 @@ export class GetChannelController {
             ];
           }
           return res;
-        },
-        [],
-      );
+        }, [])
+        .filter(({ userName }) => !!userName);
 
       return {
         photo,
