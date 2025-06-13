@@ -3,7 +3,11 @@ import { Api } from 'telegram';
 
 import { TgClientService } from '../client';
 
-import { SearchParams } from './channels.types';
+import {
+  SearchParams,
+  GetByUsernameParams,
+  GetProfilePhotoParams,
+} from './channels.types';
 
 @Injectable()
 export class TgChannelsService {
@@ -12,6 +16,36 @@ export class TgChannelsService {
   });
 
   public constructor(private client: TgClientService) {}
+
+  private async getProfilePhoto({ entity }: GetProfilePhotoParams) {
+    try {
+      const buffer = await this.client.downloadProfilePhoto(entity);
+      const base64 = buffer?.toString('base64');
+      return base64 ? `data:image/jpeg;base64,${base64}` : null;
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  public async getByUsername({ username }: GetByUsernameParams) {
+    try {
+      const channel = await this.client.getEntity(username);
+
+      const command = new Api.channels.GetFullChannel({
+        channel,
+      });
+
+      const full = await this.client.invoke(command);
+
+      const photo = await this.getProfilePhoto({ entity: channel });
+
+      return { channel, full, photo };
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
 
   public async search({ query, take }: SearchParams) {
     try {
@@ -24,9 +58,7 @@ export class TgChannelsService {
 
       const requests = chats.map(async (item) => {
         if (item.className === 'Channel' && item.photo) {
-          const buffer = await this.client.downloadProfilePhoto(item);
-          const base64 = buffer?.toString('base64');
-          return base64 ? `data:image/jpeg;base64,${base64}` : null;
+          return this.getProfilePhoto({ entity: item });
         }
         return Promise.resolve(null);
       });
