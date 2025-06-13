@@ -2,8 +2,9 @@ import { toNumber } from 'lodash';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TgApiModule } from '@services/tg-api';
+import { TgBotModule } from '@services/tg-bot';
 
-import { TgBotModule } from './_services/tg-bot';
+import { BotModule } from './_bot';
 import { SearchModule } from './search';
 import { ChannelsModule } from './channels';
 
@@ -19,6 +20,8 @@ import { ChannelsModule } from './channels';
     TgBotModule.forRoot({
       token: process.env.TG_BOT_API_TOKEN,
     }),
+    //
+    BotModule,
     // Features
     ChannelsModule,
     SearchModule,
