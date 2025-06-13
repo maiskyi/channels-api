@@ -7,6 +7,7 @@ import {
   SearchParams,
   GetByUsernameParams,
   GetProfilePhotoParams,
+  GetRecommendationsParams,
 } from './channels.types';
 
 @Injectable()
@@ -22,6 +23,37 @@ export class TgChannelsService {
       const buffer = await this.client.downloadProfilePhoto(entity);
       const base64 = buffer?.toString('base64');
       return base64 ? `data:image/jpeg;base64,${base64}` : null;
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  public async getRecommendations({ username }: GetRecommendationsParams) {
+    try {
+      const channel = await this.client.getEntity(username);
+
+      const command = new Api.channels.GetChannelRecommendations({
+        channel,
+      });
+
+      const { chats } = await this.client.invoke(command);
+
+      const requests = chats.map(async (item) => {
+        if (item.className === 'Channel' && item.photo) {
+          return this.getProfilePhoto({ entity: item });
+        }
+        return Promise.resolve(null);
+      });
+
+      const photos = await Promise.all(requests);
+
+      const channels = Array.from({ length: chats.length }).map((_, index) => ({
+        channel: chats[index],
+        photo: photos[index],
+      }));
+
+      return { channels };
     } catch (error) {
       this.logger.error(error);
       throw error;

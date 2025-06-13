@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { ChannelItem } from '@common/dto';
 
 export class GetChannelResponse {
   @ApiProperty({
@@ -10,6 +11,11 @@ export class GetChannelResponse {
   @ApiProperty({
     type: String,
   })
+  public readonly username: string;
+
+  @ApiProperty({
+    type: String,
+  })
   public readonly about: string;
 
   @ApiProperty({
@@ -17,4 +23,15 @@ export class GetChannelResponse {
     nullable: true,
   })
   public readonly photo: string | null;
+
+  @ApiProperty({
+    type: Boolean,
+  })
+  public readonly isSubscribed: boolean;
+
+  @ApiProperty({
+    type: ChannelItem,
+    isArray: true,
+  })
+  public readonly recommendations: ChannelItem[];
 }
