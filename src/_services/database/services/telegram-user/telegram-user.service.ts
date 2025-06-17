@@ -12,11 +12,11 @@ export class TelegramUserService {
 
   public constructor(private prisma: PrismaService) {}
 
-  public async getByTgId({ tgId }: GetByTgIdParams) {
+  public async getByTgId({ telegramId }: GetByTgIdParams) {
     try {
       const data = await this.prisma.telegramUser.findFirst({
         where: {
-          telegramId: tgId,
+          telegramId,
         },
       });
 

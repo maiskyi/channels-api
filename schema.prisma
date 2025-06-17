@@ -22,7 +22,7 @@ model User {
 
 model TelegramUser {
   id         String @id @default(cuid())
-  telegramId String @default("")
+  telegramId Int
   firstName  String @default("")
   lastName   String @default("")
   language   String @default("")

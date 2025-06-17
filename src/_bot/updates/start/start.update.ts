@@ -15,16 +15,14 @@ export class StartUpdate {
     private db: DatabaseService,
   ) {}
 
-  private async getOrCreateTelegramUser(from: User | undefined) {
-    if (!from) return null;
-
+  private async getOrCreateTelegramUser(from: User) {
     const { data: user } = await this.db.telegramUser.getByTgId({
-      tgId: `${from?.id}`,
+      telegramId: from?.id,
     });
 
     if (!user) {
       const { data: user } = await this.db.telegramUser.create({
-        telegramId: `${from.id}`,
+        telegramId: from.id,
         firstName: from.first_name,
         lastName: from.last_name,
         language: from.language_code,
@@ -39,8 +37,9 @@ export class StartUpdate {
   @Start()
   public async start(@Ctx() ctx: Context) {
     try {
+      if (!ctx.from) return;
+
       const user = await this.getOrCreateTelegramUser(ctx.from);
-      console.log(user);
 
       await ctx.reply('123', {
         reply_markup: {
