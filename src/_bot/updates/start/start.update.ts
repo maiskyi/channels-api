@@ -41,7 +41,9 @@ export class StartUpdate {
 
       const user = await this.getOrCreateTelegramUser(ctx.from);
 
-      await ctx.reply('123', {
+      if (!user) return;
+
+      await ctx.reply(this.i18n.t('bot.start.welcome'), {
         reply_markup: {
           inline_keyboard: [
             [
@@ -53,8 +55,12 @@ export class StartUpdate {
               },
             ],
             [
-              { text: '👍 Yes', callback_data: 'yes' },
-              { text: '👎 No', callback_data: 'no' },
+              {
+                text: this.i18n.t('actions.myChannels', {
+                  lang: ctx.from?.language_code,
+                }),
+                url: 'https://google.com',
+              },
             ],
           ],
         },
