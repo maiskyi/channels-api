@@ -13,11 +13,7 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "gen:prisma": "prisma generate"
   },
   "dependencies": {
     "@mtproto/core": "6.3.0",
@@ -26,13 +22,18 @@
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.2.0",
+    "@prisma/client": "^6.9.0",
     "@types/lodash": "^4.17.17",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "input": "^1.0.1",
     "lodash": "^4.17.21",
+    "nestjs-i18n": "^10.5.1",
+    "nestjs-telegraf": "^2.9.1",
+    "prisma": "^6.9.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
+    "telegraf": "^4.16.3",
     "telegram": "^2.26.22"
   },
   "devDependencies": {
