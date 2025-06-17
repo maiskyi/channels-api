@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TgApiModule } from '@services/tg-api';
 import { TgBotModule } from '@services/tg-bot';
 import { I18NModule } from '@core/i18n';
+import { DatabaseModule } from '@services/database';
 
 import { BotModule } from './_bot';
 import { SearchModule } from './search';
@@ -15,6 +16,7 @@ import { ChannelsModule } from './channels';
   imports: [
     ConfigModule.forRoot(),
     // Services
+    DatabaseModule.forRoot(),
     TgApiModule.forRoot({
       apiId: toNumber(process.env.TG_APP_API_ID),
       apiHash: process.env.TG_APP_API_HASH,
