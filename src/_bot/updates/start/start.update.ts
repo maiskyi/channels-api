@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { Update, Start, Ctx, Context } from '@services/tg-bot';
+import { I18nService } from '@core/i18n';
 
 @Update()
 export class StartUpdate {
@@ -7,16 +8,19 @@ export class StartUpdate {
     timestamp: true,
   });
 
+  public constructor(private i18n: I18nService) {}
+
   @Start()
   public async start(@Ctx() ctx: Context) {
-    this.logger.log(ctx.from);
     try {
       await ctx.reply('123', {
         reply_markup: {
           inline_keyboard: [
             [
               {
-                text: 'Subscribe to a channel',
+                text: this.i18n.t('actions.subscribeToChannel', {
+                  lang: ctx.from?.language_code,
+                }),
                 url: 'https://google.com',
               },
             ],
