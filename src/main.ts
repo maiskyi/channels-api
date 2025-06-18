@@ -36,7 +36,14 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Channels')
-    .addBearerAuth()
+    .addApiKey(
+      {
+        name: 'x-init-data-raw',
+        in: 'header',
+        type: 'apiKey',
+      },
+      'TMA Init Data Raw',
+    )
     .build();
 
   const documentFactory = () => SwaggerModule.createDocument(app, config);
