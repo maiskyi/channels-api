@@ -29,7 +29,9 @@ import { ChannelsModule } from './channels';
       path: resolve(__dirname, './_i18n/resources'),
     }),
     //
-    BotModule,
+    BotModule.forRoot({
+      name: process.env.TG_BOT_NAME,
+    }),
     // Features
     ChannelsModule,
     SearchModule,
