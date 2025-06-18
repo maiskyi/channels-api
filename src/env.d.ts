@@ -1,3 +1,11 @@
+import { parse } from '@telegram-apps/init-data-node';
+
+declare module 'express' {
+  interface Request {
+    user?: ReturnType<typeof parse>['user'];
+  }
+}
+
 declare namespace NodeJS {
   interface ProcessEnv {
     TG_APP_API_ID: string;

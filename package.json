@@ -24,6 +24,7 @@
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.2.0",
     "@prisma/client": "^6.9.0",
+    "@telegram-apps/init-data-node": "^2.0.8",
     "@types/lodash": "^4.17.17",
     "axios": "^1.10.0",
     "class-transformer": "^0.5.1",
