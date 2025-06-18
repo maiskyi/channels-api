@@ -31,6 +31,7 @@ import { ChannelsModule } from './channels';
     //
     BotModule.forRoot({
       name: process.env.TG_BOT_NAME,
+      webAppUrl: process.env.TG_BOT_WEB_APP_URL,
     }),
     // Features
     ChannelsModule,

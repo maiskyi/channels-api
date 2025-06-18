@@ -25,6 +25,20 @@ export interface SetMyNameRequest {
   language_code?: string;
 }
 
+export interface WebAppInfo {
+  url: string;
+}
+
+export interface MenuButtonWebApp {
+  type: string;
+  text: string;
+  web_app: WebAppInfo;
+}
+
+export interface SetChatMenuButtonRequest {
+  menu_button: MenuButtonWebApp;
+}
+
 export interface ChannelItem {
   id: string;
   title: string;
@@ -54,6 +68,8 @@ export interface GetSearchChannelsResponse {
 export type SetMyCommandsData = boolean;
 
 export type SetMyNameData = boolean;
+
+export type SetChatMenuButtonData = boolean;
 
 export interface GetChannelsParams {
   take?: number;

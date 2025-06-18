@@ -17,6 +17,10 @@ async function bootstrap() {
         path: 'setMyName',
         method: RequestMethod.POST,
       },
+      {
+        path: 'setChatMenuButton',
+        method: RequestMethod.POST,
+      },
     ],
   });
 

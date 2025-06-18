@@ -11,6 +11,8 @@
  */
 
 import {
+  SetChatMenuButtonData,
+  SetChatMenuButtonRequest,
   SetMyCommandsData,
   SetMyCommandsRequest,
   SetMyNameData,
@@ -51,6 +53,25 @@ export class Bot<SecurityDataType = unknown> {
   setMyName = (data: SetMyNameRequest, params: RequestParams = {}) =>
     this.http.request<SetMyNameData, any>({
       path: `/setMyName`,
+      method: "POST",
+      body: data,
+      type: ContentType.Json,
+      format: "json",
+      ...params,
+    });
+  /**
+   * No description
+   *
+   * @tags Bot
+   * @name SetChatMenuButton
+   * @request POST:/setChatMenuButton
+   */
+  setChatMenuButton = (
+    data: SetChatMenuButtonRequest,
+    params: RequestParams = {},
+  ) =>
+    this.http.request<SetChatMenuButtonData, any>({
+      path: `/setChatMenuButton`,
       method: "POST",
       body: data,
       type: ContentType.Json,

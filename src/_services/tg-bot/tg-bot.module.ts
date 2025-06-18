@@ -7,11 +7,16 @@ import { HttpClientService } from './services/http-client';
 import { TgBotApiService } from './services/api';
 import { SetMyCommandsController } from './controllers/setMyCommands';
 import { SetMyNameController } from './controllers/setMyName';
+import { SetChatMenuButtonController } from './controllers/setChatMenuButton';
 
 @Module({
   providers: [TgBotApiService],
   exports: [TgBotApiService],
-  controllers: [SetMyCommandsController, SetMyNameController],
+  controllers: [
+    SetMyCommandsController,
+    SetMyNameController,
+    SetChatMenuButtonController,
+  ],
 })
 export class TgBotModule {
   static forRoot({ token }: TgBotModuleConfig): DynamicModule {

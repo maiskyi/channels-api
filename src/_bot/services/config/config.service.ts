@@ -9,4 +9,8 @@ export class BotConfigService {
   public get name() {
     return this.config.name;
   }
+
+  public get webAppUrl() {
+    return this.config.webAppUrl;
+  }
 }

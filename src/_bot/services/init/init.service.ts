@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { TgBotApiService } from '@services/tg-bot';
 
@@ -25,11 +26,25 @@ export class BotInitService implements OnModuleInit {
         ],
         language_code: 'en',
       });
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const nameRequest = this.api.setMyName({
-        name: this.config.name,
+
+      // const nameRequest = this.api.setMyName({
+      //   name: this.config.name,
+      // });
+
+      const buttonRequest = this.api.setChatMenuButton({
+        menu_button: {
+          text: 'Open',
+          type: 'web_app',
+          web_app: {
+            url: this.config.webAppUrl,
+          },
+        },
       });
-      await Promise.all([commandsRequest, nameRequest]);
+      await Promise.all([
+        commandsRequest,
+        // nameRequest,
+        buttonRequest,
+      ]);
     } catch (error) {
       this.logger.error(error);
     }
