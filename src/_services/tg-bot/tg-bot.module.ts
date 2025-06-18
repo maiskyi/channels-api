@@ -3,6 +3,7 @@ import { TelegrafModule } from 'nestjs-telegraf';
 
 import { BOT_NAME } from './tg-bot.const';
 import { TgBotModuleConfig } from './tg-bot.types';
+import { HttpClientService } from './services/http-client';
 
 @Module({})
 export class TgBotModule {
@@ -10,7 +11,14 @@ export class TgBotModule {
     return {
       module: TgBotModule,
       global: true,
-      providers: [],
+      providers: [
+        {
+          provide: HttpClientService,
+          useValue: new HttpClientService({
+            token,
+          }),
+        },
+      ],
       imports: [
         TelegrafModule.forRoot({
           token,
