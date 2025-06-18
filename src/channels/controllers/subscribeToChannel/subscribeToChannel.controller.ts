@@ -1,6 +1,6 @@
 import { Controller, Param, Post, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '@services/tg-app';
+import { AuthGuard, User, UserType } from '@services/tg-app';
 
 @ApiTags('Channels')
 @Controller('channels')
@@ -12,7 +12,11 @@ export class SubscribeToChannelController {
   @ApiOperation({
     operationId: 'subscribeToChannel',
   })
-  public subscribeToChannel(@Param('username') username: string) {
+  public subscribeToChannel(
+    @Param('username') username: string,
+    @User() user: UserType,
+  ) {
+    console.log(user);
     return { username };
   }
 }
