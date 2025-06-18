@@ -1,18 +1,37 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { TgBotApiService } from '@services/tg-bot';
+
+import { BotConfigService } from '../config';
 
 @Injectable()
 export class BotInitService implements OnModuleInit {
-  public constructor(private api: TgBotApiService) {}
+  private logger = new Logger(BotInitService.name, {
+    timestamp: true,
+  });
+
+  public constructor(
+    private api: TgBotApiService,
+    private config: BotConfigService,
+  ) {}
+
   public async onModuleInit() {
-    const commandsRequest = this.api.setMyCommands({
-      commands: [
-        {
-          command: 'help',
-          description: 'Show help and available commands',
-        },
-      ],
-    });
-    await Promise.all([commandsRequest]);
+    try {
+      const commandsRequest = this.api.setMyCommands({
+        commands: [
+          {
+            command: 'help',
+            description: 'Show help and available commands',
+          },
+        ],
+        language_code: 'en',
+      });
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const nameRequest = this.api.setMyName({
+        name: this.config.name,
+      });
+      await Promise.all([commandsRequest, nameRequest]);
+    } catch (error) {
+      this.logger.error(error);
+    }
   }
 }

@@ -1,18 +1,18 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { SetMyCommandsRequest } from './setMyCommands.dto';
+import { SetMyNameRequest } from './setMyName.dto';
 
 @ApiTags('Bot')
-@Controller('setMyCommands')
-export class SetMyCommandsController {
+@Controller('setMyName')
+export class SetMyNameController {
   @Post()
   @ApiOperation({
-    operationId: 'setMyCommands',
+    operationId: 'setMyName',
   })
   @ApiOkResponse({
     type: Boolean,
   })
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public async setMyCommands(@Body() request: SetMyCommandsRequest) {}
+  public setMyName(@Body() req: SetMyNameRequest) {}
 }

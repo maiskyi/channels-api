@@ -20,6 +20,11 @@ export interface SetMyCommandsRequest {
   language_code?: string;
 }
 
+export interface SetMyNameRequest {
+  name?: string;
+  language_code?: string;
+}
+
 export interface ChannelItem {
   id: string;
   title: string;
@@ -46,7 +51,9 @@ export interface GetSearchChannelsResponse {
   data: ChannelItem[];
 }
 
-export type SetMyCommandsData = any;
+export type SetMyCommandsData = boolean;
+
+export type SetMyNameData = boolean;
 
 export interface GetChannelsParams {
   take?: number;

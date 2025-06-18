@@ -13,6 +13,10 @@ async function bootstrap() {
         path: 'setMyCommands',
         method: RequestMethod.POST,
       },
+      {
+        path: 'setMyName',
+        method: RequestMethod.POST,
+      },
     ],
   });
 

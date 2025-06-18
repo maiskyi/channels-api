@@ -6,11 +6,12 @@ import { TgBotModuleConfig } from './tg-bot.types';
 import { HttpClientService } from './services/http-client';
 import { TgBotApiService } from './services/api';
 import { SetMyCommandsController } from './controllers/setMyCommands';
+import { SetMyNameController } from './controllers/setMyName';
 
 @Module({
   providers: [TgBotApiService],
   exports: [TgBotApiService],
-  controllers: [SetMyCommandsController],
+  controllers: [SetMyCommandsController, SetMyNameController],
 })
 export class TgBotModule {
   static forRoot({ token }: TgBotModuleConfig): DynamicModule {

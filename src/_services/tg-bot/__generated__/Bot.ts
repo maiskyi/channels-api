@@ -10,7 +10,12 @@
  * ---------------------------------------------------------------
  */
 
-import { SetMyCommandsData, SetMyCommandsRequest } from "./data-contracts";
+import {
+  SetMyCommandsData,
+  SetMyCommandsRequest,
+  SetMyNameData,
+  SetMyNameRequest,
+} from "./data-contracts";
 import { ContentType, HttpClient, RequestParams } from "./http-client";
 
 export class Bot<SecurityDataType = unknown> {
@@ -33,6 +38,23 @@ export class Bot<SecurityDataType = unknown> {
       method: "POST",
       body: data,
       type: ContentType.Json,
+      format: "json",
+      ...params,
+    });
+  /**
+   * No description
+   *
+   * @tags Bot
+   * @name SetMyName
+   * @request POST:/setMyName
+   */
+  setMyName = (data: SetMyNameRequest, params: RequestParams = {}) =>
+    this.http.request<SetMyNameData, any>({
+      path: `/setMyName`,
+      method: "POST",
+      body: data,
+      type: ContentType.Json,
+      format: "json",
       ...params,
     });
 }
