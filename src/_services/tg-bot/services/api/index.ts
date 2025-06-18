@@ -1,1 +1,1 @@
-export { TgBotApiService, CommandsService } from './api.service';
+export { TgBotApiService } from './api.service';

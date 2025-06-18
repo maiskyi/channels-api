@@ -11,12 +11,13 @@
  */
 
 import {
-  GetMyCommandsCreateData,
-  GetMyCommandsCreateError,
+  GetChannelData,
+  GetChannelsData,
+  GetChannelsParams,
 } from "./data-contracts";
 import { HttpClient, RequestParams } from "./http-client";
 
-export class GetMyCommands<SecurityDataType = unknown> {
+export class Channels<SecurityDataType = unknown> {
   http: HttpClient<SecurityDataType>;
 
   constructor(http: HttpClient<SecurityDataType>) {
@@ -24,15 +25,31 @@ export class GetMyCommands<SecurityDataType = unknown> {
   }
 
   /**
-   * @description Use this method to get the current list of the bot's commands. Requires no parameters. Returns Array of [BotCommand](https://core.telegram.org/bots/api/#botcommand) on success.
+   * No description
    *
-   * @name GetMyCommandsCreate
-   * @request POST:/getMyCommands
+   * @tags Channels
+   * @name GetChannels
+   * @request GET:/api/channels
    */
-  getMyCommandsCreate = (params: RequestParams = {}) =>
-    this.http.request<GetMyCommandsCreateData, GetMyCommandsCreateError>({
-      path: `/getMyCommands`,
-      method: "POST",
+  getChannels = (query: GetChannelsParams, params: RequestParams = {}) =>
+    this.http.request<GetChannelsData, any>({
+      path: `/api/channels`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+  /**
+   * No description
+   *
+   * @tags Channels
+   * @name GetChannel
+   * @request GET:/api/channels/{username}
+   */
+  getChannel = (username: string, params: RequestParams = {}) =>
+    this.http.request<GetChannelData, any>({
+      path: `/api/channels/${username}`,
+      method: "GET",
       format: "json",
       ...params,
     });

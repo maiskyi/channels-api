@@ -10,10 +10,10 @@
  * ---------------------------------------------------------------
  */
 
-import { CloseCreateData, CloseCreateError } from "./data-contracts";
+import { ChannelsSearchData, ChannelsSearchParams } from "./data-contracts";
 import { HttpClient, RequestParams } from "./http-client";
 
-export class Close<SecurityDataType = unknown> {
+export class Search<SecurityDataType = unknown> {
   http: HttpClient<SecurityDataType>;
 
   constructor(http: HttpClient<SecurityDataType>) {
@@ -21,15 +21,17 @@ export class Close<SecurityDataType = unknown> {
   }
 
   /**
-   * @description Use this method to close the bot instance before moving it from one local server to another. You need to delete the webhook before calling this method to ensure that the bot isn't launched again after server restart. The method will return error 429 in the first 10 minutes after the bot is launched. Returns *True* on success. Requires no parameters.
+   * No description
    *
-   * @name CloseCreate
-   * @request POST:/close
+   * @tags Search
+   * @name ChannelsSearch
+   * @request GET:/api/search/channels
    */
-  closeCreate = (params: RequestParams = {}) =>
-    this.http.request<CloseCreateData, CloseCreateError>({
-      path: `/close`,
-      method: "POST",
+  channelsSearch = (query: ChannelsSearchParams, params: RequestParams = {}) =>
+    this.http.request<ChannelsSearchData, any>({
+      path: `/api/search/channels`,
+      method: "GET",
+      query: query,
       format: "json",
       ...params,
     });

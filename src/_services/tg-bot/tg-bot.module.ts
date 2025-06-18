@@ -4,11 +4,13 @@ import { TelegrafModule } from 'nestjs-telegraf';
 import { BOT_NAME } from './tg-bot.const';
 import { TgBotModuleConfig } from './tg-bot.types';
 import { HttpClientService } from './services/http-client';
-import { TgBotApiService, CommandsService } from './services/api';
+import { TgBotApiService } from './services/api';
+import { SetMyCommandsController } from './controllers/setMyCommands';
 
 @Module({
-  providers: [TgBotApiService, CommandsService],
+  providers: [TgBotApiService],
   exports: [TgBotApiService],
+  controllers: [SetMyCommandsController],
 })
 export class TgBotModule {
   static forRoot({ token }: TgBotModuleConfig): DynamicModule {

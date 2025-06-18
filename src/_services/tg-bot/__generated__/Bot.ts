@@ -10,14 +10,10 @@
  * ---------------------------------------------------------------
  */
 
-import {
-  StopPollCreateData,
-  StopPollCreateError,
-  StopPollCreatePayload,
-} from "./data-contracts";
+import { SetMyCommandsData, SetMyCommandsRequest } from "./data-contracts";
 import { ContentType, HttpClient, RequestParams } from "./http-client";
 
-export class StopPoll<SecurityDataType = unknown> {
+export class Bot<SecurityDataType = unknown> {
   http: HttpClient<SecurityDataType>;
 
   constructor(http: HttpClient<SecurityDataType>) {
@@ -25,18 +21,18 @@ export class StopPoll<SecurityDataType = unknown> {
   }
 
   /**
-   * @description Use this method to stop a poll which was sent by the bot. On success, the stopped [Poll](https://core.telegram.org/bots/api/#poll) with the final results is returned.
+   * No description
    *
-   * @name StopPollCreate
-   * @request POST:/stopPoll
+   * @tags Bot
+   * @name SetMyCommands
+   * @request POST:/setMyCommands
    */
-  stopPollCreate = (data: StopPollCreatePayload, params: RequestParams = {}) =>
-    this.http.request<StopPollCreateData, StopPollCreateError>({
-      path: `/stopPoll`,
+  setMyCommands = (data: SetMyCommandsRequest, params: RequestParams = {}) =>
+    this.http.request<SetMyCommandsData, any>({
+      path: `/setMyCommands`,
       method: "POST",
       body: data,
       type: ContentType.Json,
-      format: "json",
       ...params,
     });
 }
