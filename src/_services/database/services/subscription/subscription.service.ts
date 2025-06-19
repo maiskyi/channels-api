@@ -6,6 +6,7 @@ import {
   FindOneParams,
   CreateParams,
   DeleteParams,
+  FindManyParams,
 } from './subscription.types';
 
 @Injectable()
@@ -15,6 +16,24 @@ export class SubscriptionService {
   });
 
   public constructor(private prisma: PrismaService) {}
+
+  public async findMany(params: FindManyParams) {
+    try {
+      const data = await this.prisma.subscription.findMany({
+        ...params,
+        select: {
+          id: true,
+          user: true,
+          channel: true,
+        },
+      });
+
+      return { data };
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
 
   public async findOne(params: FindOneParams) {
     try {

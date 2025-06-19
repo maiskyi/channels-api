@@ -16,3 +16,7 @@ export interface GetRecommendationsParams {
 export interface GetProfilePhotoParams {
   entity: EntityLike;
 }
+
+export interface FindManyByUsernameParams {
+  username: string[];
+}
