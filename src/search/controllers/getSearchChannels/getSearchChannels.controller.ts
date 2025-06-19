@@ -36,7 +36,7 @@ export class GetSearchChannelsController {
             ...res,
             {
               photo,
-              id: channel.id,
+              id: channel.id.valueOf(),
               title: channel.title,
               userName: channel.username,
             },

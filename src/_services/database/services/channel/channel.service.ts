@@ -2,21 +2,21 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { PrismaService } from '../prisma';
 
-import { GetByTgIdParams, CreateParams } from './telegram-user.types';
+import { GetByUsernameParams, CreateParams } from './channel.types';
 
 @Injectable()
-export class TelegramUserService {
-  private logger = new Logger(TelegramUserService.name, {
+export class ChannelService {
+  private logger = new Logger(ChannelService.name, {
     timestamp: true,
   });
 
   public constructor(private prisma: PrismaService) {}
 
-  public async getByTgId({ telegramId }: GetByTgIdParams) {
+  public async getByUsername({ username }: GetByUsernameParams) {
     try {
-      const data = await this.prisma.telegramUser.findFirst({
+      const data = await this.prisma.channel.findFirst({
         where: {
-          telegramId,
+          username,
         },
       });
 
@@ -29,7 +29,7 @@ export class TelegramUserService {
 
   public async create(input: CreateParams) {
     try {
-      const data = await this.prisma.telegramUser.create({
+      const data = await this.prisma.channel.create({
         data: input,
       });
 

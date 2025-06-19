@@ -16,13 +16,13 @@ export class StartUpdate {
   ) {}
 
   private async getOrCreateTelegramUser(from: User) {
-    const { data: user } = await this.db.telegramUser.getByTgId({
-      telegramId: from?.id,
+    const { data: user } = await this.db.user.getByTid({
+      tid: from?.id,
     });
 
     if (!user) {
-      const { data: user } = await this.db.telegramUser.create({
-        telegramId: from.id,
+      const { data: user } = await this.db.user.create({
+        tid: from.id,
         firstName: from.first_name,
         lastName: from.last_name,
         language: from.language_code,
