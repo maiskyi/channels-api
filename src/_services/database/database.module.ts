@@ -14,7 +14,7 @@ import { SubscriptionService } from './services/subscription';
     ChannelService,
     SubscriptionService,
   ],
-  exports: [DatabaseService],
+  exports: [DatabaseService, PrismaService],
 })
 export class DatabaseModule {
   static forRoot(): DynamicModule {

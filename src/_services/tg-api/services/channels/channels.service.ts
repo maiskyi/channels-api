@@ -8,6 +8,7 @@ import {
   GetByUsernameParams,
   GetProfilePhotoParams,
   GetRecommendationsParams,
+  FindManyByUsernameParams,
 } from './channels.types';
 
 @Injectable()
@@ -107,5 +108,44 @@ export class TgChannelsService {
       this.logger.error({ query, take }, error);
       throw error;
     }
+  }
+
+  public async findManyByUsername({ username }: FindManyByUsernameParams) {
+    const commands = username.map(
+      (username) =>
+        new Api.contacts.ResolveUsername({
+          username,
+        }),
+    );
+
+    const channelsRequests = commands.map((command) =>
+      this.client.invoke(command),
+    );
+
+    const channelsResponses = await Promise.all(channelsRequests);
+
+    const channelsItems = channelsResponses
+      .reduce((res, { chats }) => {
+        return chats ? [...res, ...chats] : res;
+      }, [])
+      .reduce((res, item) => {
+        return item.className === 'Channel' ? [...res, item] : res;
+      }, []);
+
+    const photosRequests = channelsItems.map(async (item) => {
+      if (item.photo) {
+        return this.getProfilePhoto({ entity: item });
+      }
+      return Promise.resolve(null);
+    });
+
+    const photosResponses = await Promise.all(photosRequests);
+
+    const channels = channelsItems.map((channel, index) => ({
+      channel,
+      photo: photosResponses[index],
+    }));
+
+    return { channels };
   }
 }
