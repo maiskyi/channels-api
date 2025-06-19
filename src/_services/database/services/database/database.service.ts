@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 
-import { TelegramUserService } from '../telegram-user';
-import { TelegramChannelService } from '../telegram-channel';
+import { UserService } from '../user';
+import { ChannelService } from '../channel';
 
 @Injectable()
 export class DatabaseService {
   public constructor(
-    public telegramUser: TelegramUserService,
-    public telegramChannel: TelegramChannelService,
+    public user: UserService,
+    public channel: ChannelService,
   ) {}
 }

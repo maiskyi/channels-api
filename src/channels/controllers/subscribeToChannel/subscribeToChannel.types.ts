@@ -1,3 +1,3 @@
 export interface GetOrCreateTelegramChannelParams {
-  telegramUsername: string;
+  username: string;
 }

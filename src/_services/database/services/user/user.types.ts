@@ -1,9 +1,9 @@
-export interface GetByTgIdParams {
-  telegramId: number;
+export interface GetByTidParams {
+  tid: number;
 }
 
 export interface CreateParams {
-  telegramId: number;
+  tid: number;
   firstName?: string;
   lastName?: string;
   language?: string;
