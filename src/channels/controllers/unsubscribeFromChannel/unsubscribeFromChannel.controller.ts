@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { DatabaseService } from '@services/database';
-import { TgApiClientService } from '@services/tg-api';
 import { AuthGuard, User, UserType } from '@services/tg-app';
 
 @ApiTags('Channels')
@@ -19,10 +18,7 @@ export class UnsubscribeFromChannelController {
     timestamp: true,
   });
 
-  public constructor(
-    private tsApi: TgApiClientService,
-    private db: DatabaseService,
-  ) {}
+  public constructor(private db: DatabaseService) {}
 
   @Post(':username/unsubscribe')
   @UseGuards(AuthGuard)
@@ -69,6 +65,20 @@ export class UnsubscribeFromChannelController {
       const { data: deleted } = await this.db.subscription.delete({
         id: subscription?.id,
       });
+
+      const { data } = await this.db.subscription.findOne({
+        where: {
+          channelId: dbChannel.id,
+        },
+      });
+
+      if (!data) {
+        const { data } = await this.db.channel.delete({
+          id: dbChannel.id,
+        });
+
+        this.logger.log('Channel deleted', data);
+      }
 
       return deleted;
     } catch (error) {
