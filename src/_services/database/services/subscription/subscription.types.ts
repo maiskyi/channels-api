@@ -8,3 +8,7 @@ export interface CreateParams {
 export type FindOneParams = Parameters<
   InstanceType<typeof PrismaService>['subscription']['findFirst']
 >['0'];
+
+export interface DeleteParams {
+  id: string;
+}

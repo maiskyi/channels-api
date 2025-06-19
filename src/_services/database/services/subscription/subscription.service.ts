@@ -2,7 +2,11 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { PrismaService } from '../prisma';
 
-import { FindOneParams, CreateParams } from './subscription.types';
+import {
+  FindOneParams,
+  CreateParams,
+  DeleteParams,
+} from './subscription.types';
 
 @Injectable()
 export class SubscriptionService {
@@ -27,6 +31,19 @@ export class SubscriptionService {
     try {
       const data = await this.prisma.subscription.create({
         data: input,
+      });
+
+      return { data };
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  public async delete(where: DeleteParams) {
+    try {
+      const data = await this.prisma.subscription.delete({
+        where,
       });
 
       return { data };

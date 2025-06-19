@@ -6,10 +6,11 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard, User, UserType } from '@services/tg-app';
 import { TgApiClientService } from '@services/tg-api';
 import { DatabaseService } from '@services/database';
+import { Subscription } from '@common/dto';
 
 import {
   GetOrCreateTelegramChannelParams,
@@ -80,10 +81,13 @@ export class SubscribeToChannelController {
   @ApiOperation({
     operationId: 'subscribeToChannel',
   })
+  @ApiOkResponse({
+    type: Subscription,
+  })
   public async subscribeToChannel(
     @Param('username') username: string,
     @User() user: UserType,
-  ) {
+  ): Promise<Subscription> {
     try {
       if (!user?.id) throw new BadRequestException('Session does not exist');
 
@@ -102,14 +106,12 @@ export class SubscribeToChannelController {
 
       if (!tguser) throw new BadRequestException('User not found');
 
-      const subscription = await this.getOrCreateSubscription({
+      const { data: subscription } = await this.getOrCreateSubscription({
         userId: tguser.id,
         channelId: channel.id,
       });
 
-      console.log(subscription);
-
-      return { username };
+      return subscription;
     } catch (error) {
       this.logger.error(error);
       throw error;
