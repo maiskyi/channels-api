@@ -4,9 +4,16 @@ import { PrismaService } from './services/prisma';
 import { DatabaseService } from './services/database';
 import { UserService } from './services/user';
 import { ChannelService } from './services/channel';
+import { SubscriptionService } from './services/subscription';
 
 @Module({
-  providers: [PrismaService, DatabaseService, UserService, ChannelService],
+  providers: [
+    PrismaService,
+    DatabaseService,
+    UserService,
+    ChannelService,
+    SubscriptionService,
+  ],
   exports: [DatabaseService],
 })
 export class DatabaseModule {

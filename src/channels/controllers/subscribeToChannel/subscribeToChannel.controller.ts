@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Controller,
+  Logger,
   Param,
   Post,
   UseGuards,
@@ -10,11 +11,18 @@ import { AuthGuard, User, UserType } from '@services/tg-app';
 import { TgApiClientService } from '@services/tg-api';
 import { DatabaseService } from '@services/database';
 
-import { GetOrCreateTelegramChannelParams } from './subscribeToChannel.types';
+import {
+  GetOrCreateTelegramChannelParams,
+  GetOrCreateSubscriptionParams,
+} from './subscribeToChannel.types';
 
 @ApiTags('Channels')
 @Controller('channels')
 export class SubscribeToChannelController {
+  private logger = new Logger(SubscribeToChannelController.name, {
+    timestamp: true,
+  });
+
   public constructor(
     private tsApi: TgApiClientService,
     private db: DatabaseService,
@@ -46,6 +54,27 @@ export class SubscribeToChannelController {
     throw new Error();
   }
 
+  private async getOrCreateSubscription({
+    userId,
+    channelId,
+  }: GetOrCreateSubscriptionParams) {
+    const { data: sub } = await this.db.subscription.findOne({
+      where: {
+        userId,
+        channelId,
+      },
+    });
+
+    if (sub) return { data: sub };
+
+    const { data } = await this.db.subscription.create({
+      userId,
+      channelId,
+    });
+
+    return { data };
+  }
+
   @Post(':username/subscribe')
   @UseGuards(AuthGuard)
   @ApiOperation({
@@ -55,23 +84,35 @@ export class SubscribeToChannelController {
     @Param('username') username: string,
     @User() user: UserType,
   ) {
-    if (!user?.id) throw new BadRequestException();
+    try {
+      if (!user?.id) throw new BadRequestException('Session does not exist');
 
-    const tgChannelRequest = this.getOrCreateTelegramChannel({
-      username,
-    });
+      const channelRequest = this.getOrCreateTelegramChannel({
+        username,
+      });
 
-    const tgUserRequest = this.db.user.getByTid({
-      tid: user?.id,
-    });
+      const userRequest = this.db.user.getByTid({
+        tid: user?.id,
+      });
 
-    const [{ data: tgChannel }, { data: tgUser }] = await Promise.all([
-      tgChannelRequest,
-      tgUserRequest,
-    ]);
+      const [{ data: channel }, { data: tguser }] = await Promise.all([
+        channelRequest,
+        userRequest,
+      ]);
 
-    console.log(tgChannel, tgUser);
+      if (!tguser) throw new BadRequestException('User not found');
 
-    return { username };
+      const subscription = await this.getOrCreateSubscription({
+        userId: tguser.id,
+        channelId: channel.id,
+      });
+
+      console.log(subscription);
+
+      return { username };
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
   }
 }
