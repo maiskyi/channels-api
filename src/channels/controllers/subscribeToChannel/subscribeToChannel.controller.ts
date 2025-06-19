@@ -20,9 +20,30 @@ export class SubscribeToChannelController {
     private db: DatabaseService,
   ) {}
 
-  private getOrCreateTelegramChannel({
-    username,
-  }: GetOrCreateTelegramChannelParams) {}
+  private async getOrCreateTelegramChannel({
+    telegramUsername,
+  }: GetOrCreateTelegramChannelParams) {
+    const { data } = await this.db.telegramChannel.getByTelegramUsername({
+      telegramUsername,
+    });
+
+    if (data) return { data };
+
+    const { channel } = await this.tsApi.channels.getByUsername({
+      username: telegramUsername,
+    });
+
+    if (channel.className === 'Channel') {
+      const data = this.db.telegramChannel.create({
+        telegramUsername,
+        title: channel.title,
+      });
+
+      return data;
+    }
+
+    throw new Error();
+  }
 
   @Post(':username/subscribe')
   @UseGuards(AuthGuard)
@@ -30,24 +51,26 @@ export class SubscribeToChannelController {
     operationId: 'subscribeToChannel',
   })
   public async subscribeToChannel(
-    @Param('username') username: string,
+    @Param('username') telegramUsername: string,
     @User() user: UserType,
   ) {
     if (!user?.id) throw new BadRequestException();
 
-    const channelRequest = this.tsApi.channels.getByUsername({
-      username,
+    const tgChannelRequest = this.getOrCreateTelegramChannel({
+      telegramUsername,
     });
 
-    const telegramUserRequest = this.db.telegramUser.getByTgId({
+    const tgUserRequest = this.db.telegramUser.getByTgId({
       telegramId: user?.id,
     });
 
-    const [{ channel }, { data: telegramUser }] = await Promise.all([
-      channelRequest,
-      telegramUserRequest,
+    const [{ data: tgChannel }, { data: tgUser }] = await Promise.all([
+      tgChannelRequest,
+      tgUserRequest,
     ]);
-    console.log(channel);
-    return { username };
+
+    console.log(tgChannel, tgUser);
+
+    return { telegramUsername };
   }
 }

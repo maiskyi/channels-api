@@ -30,8 +30,8 @@ model TelegramUser {
 }
 
 model TelegramChannel {
-  id         String    @id @default(cuid())
-  telegramId Int       @unique
-  title      String    @default("")
-  createdAt  DateTime? @default(now())
+  id               String    @id @default(cuid())
+  telegramUsername String    @unique @default("")
+  title            String    @default("")
+  createdAt        DateTime? @default(now())
 }
