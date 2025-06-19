@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { TgBotApiService } from '@services/tg-bot';
 
@@ -17,6 +16,7 @@ export class BotInitService implements OnModuleInit {
 
   public async onModuleInit() {
     try {
+      return;
       const commandsRequest = this.api.setMyCommands({
         commands: [
           {
@@ -27,9 +27,9 @@ export class BotInitService implements OnModuleInit {
         language_code: 'en',
       });
 
-      // const nameRequest = this.api.setMyName({
-      //   name: this.config.name,
-      // });
+      const nameRequest = this.api.setMyName({
+        name: this.config.name,
+      });
 
       const buttonRequest = this.api.setChatMenuButton({
         menu_button: {
@@ -40,11 +40,7 @@ export class BotInitService implements OnModuleInit {
           },
         },
       });
-      await Promise.all([
-        commandsRequest,
-        // nameRequest,
-        buttonRequest,
-      ]);
+      await Promise.all([commandsRequest, nameRequest, buttonRequest]);
     } catch (error) {
       this.logger.error(error);
     }

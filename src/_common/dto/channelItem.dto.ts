@@ -2,9 +2,9 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class ChannelItem {
   @ApiProperty({
-    type: String,
+    type: Number,
   })
-  public readonly id: bigInt.BigInteger;
+  public readonly id: number;
 
   @ApiProperty({
     type: String,

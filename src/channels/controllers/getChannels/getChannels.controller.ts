@@ -22,7 +22,7 @@ export class GetChannelsController {
         resolve({ data: [], total: 0 });
         resolve({
           data: Array.from({ length: take }).map(() => ({
-            id: faker.string.uuid() as unknown as bigInt.BigInteger,
+            id: faker.number.int(),
             title: faker.lorem.words(3),
             userName: faker.lorem.word(),
             photo: faker.image.dataUri(),
